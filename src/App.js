@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import Loader from './components/Loader';
+import Home from './components/Home';
+import { useAnimationControls } from 'framer-motion';
+import { useEffect } from 'react';
 
 function App() {
+  const loaderControls = useAnimationControls();
+  const pageAnimation = useAnimationControls();
+  const homeAnimation = useAnimationControls();
+
+  const sequence = async () => {
+    await homeAnimation.set('initial');
+    await loaderControls.start('animate');
+    await pageAnimation.start('animate');
+    await homeAnimation.start('animate');
+  };
+
+  useEffect(() => {
+    sequence();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Loader loaderControls={loaderControls} pageAnimation={pageAnimation} />
+      <Home homeAnimation={homeAnimation} />
     </div>
   );
 }
